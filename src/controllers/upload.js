@@ -50,7 +50,7 @@ class UploadController extends BaseController {
     form.keepExtensions = true // 使用文件的原扩展名
     form.encoding = 'utf-8'
 
-    var targetDir = path.join(__dirname, '/home/storeroom')
+    var targetDir = path.join('/home/storeroom')
 
     // 检查目标目录，不存在则创建
     try {

@@ -73,25 +73,19 @@ class UploadController extends BaseController {
     // 文件解析与保存
     function _fileParse (req) {
       return new Promise((resolve, reject) => {
-        form.parse(req, function (err, fields, files) {
+        form.parse(req, function (err, fields, formData) {
           if (err) throw err
-          var filesUrl = []
-          var keys = Object.keys(files)
-          keys.forEach(function (key) {
-            var filePath = files[key].path
-            var fileExt = filePath.substring(filePath.lastIndexOf('.'))
-            // 以当前时间戳对上传文件进行重命名
-            var fileName = new Date().getTime() + fileExt
-            var targetFile = path.join(targetDir, fileName)
-            // 移动文件
-            fs.renameSync(filePath, targetFile)
-            // 文件的Url（相对路径）
-            filesUrl.push('/home/storeroom/' + fileName)
-          })
+          const file = formData.file
+          const fileExt = file.path.substring(file.path.lastIndexOf('.'))
+          const fileName = new Date().getTime() + fileExt
+          const targetFile = path.join(targetDir, fileName)
+          const fileServerPath = `/home/storeroom/${fileName}`
+          // 移动文件
+          fs.renameSync(file.path, targetFile)
           resolve({
             fileName,
-            files,
-            filesUrl
+            fileExt,
+            fileServerPath
           })
         })
       })

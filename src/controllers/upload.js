@@ -59,8 +59,9 @@ class UploadController extends BaseController {
       fs.mkdirSync(targetDir)
     }
 
+    let parsed
     try {
-      const parsed = await _fileParse(ctx.req)
+      parsed = await _fileParse(ctx.req)
     } catch (e) {
       console.log(e)
     }

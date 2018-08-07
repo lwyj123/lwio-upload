@@ -12,7 +12,6 @@ const ErrorRoutesCatch = require('./middleware/ErrorRoutesCatch')
 const customizedLogger = require('./tool/customized-winston-logger')
 require('./mongodb/db') // 直接连接数据库，不需要使用db
 
-
 global.logger = customizedLogger
 
 const app = new Koa2()
@@ -20,7 +19,8 @@ const env = process.env.NODE_ENV || 'development' // Current mode
 
 // const publicKey = fs.readFileSync(path.join(__dirname, '../publicKey.pub'))
 
-if (env === 'development') { // logger
+if (env === 'development') {
+  // logger
   app.use((ctx, next) => {
     const start = new Date()
     return next().then(() => {
@@ -34,7 +34,10 @@ app
   .use(KoaBody())
   .use((ctx, next) => {
     ctx.set('Access-Control-Allow-Origin', '*')
-    ctx.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Access-Token')
+    ctx.set(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Access-Token'
+    )
     ctx.set('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS')
     ctx.set('Access-Control-Allow-Credentials', true) // 允许带上 cookie
     return next()
@@ -50,6 +53,8 @@ process.on('uncaughtException', function (err) {
   // 打印出错误的调用栈方便调试
   console.log(err.stack)
 })
-console.log('Now start API server on port ' + SystemConfig.API_server_port + '...')
+console.log(
+  'Now start API server on port ' + SystemConfig.API_server_port + '...'
+)
 
 module.exports = app
